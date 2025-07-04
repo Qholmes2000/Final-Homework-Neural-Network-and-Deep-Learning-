@@ -35,7 +35,7 @@ This section explains how to process raw images into a NeRF-ready dataset using 
 ### Step-by-Step Processing Guide
 
 #### 1. Prepare Raw Images
-- Place images in a directory (in our reposity, e.g.`~/my_dataset/images`)
+- Place images in a directory (in our reposity, e.g.`~/images`)
 - Requirements:
   - Minimum 20 images (100+ recommended)
   - Consistent lighting conditions
@@ -53,29 +53,8 @@ conda install -c conda-forge colmap
 ```bash
 # Basic processing command
 ns-process-data images \
-    --data ~/my_dataset/raw_images \
-    --output-dir ~/my_dataset/processed
-```
-
-#### 4. Full Processing with Custom Parameters
-```bash
-ns-process-data images \
-    --data ~/my_dataset/raw_images \
-    --output-dir ~/my_dataset/processed \
-    --feature-type superpoint \
-    --matcher-type superglue \
-    --min-track-length 5 \
-    --camera-model OPENCV \
-    --sfm-tool hloc \
-    --verbose
-```
-
-#### 5. Process Video Footage (Alternative)
-```bash
-ns-process-data video \
-    --data ~/my_dataset/video.mp4 \
-    --output-dir ~/my_dataset/processed \
-    --frame-skip 5  # Extract every 5th frame
+    --data ~/images \
+    --output-dir ~/processed_data
 ```
 
 ### Advanced Processing Options
@@ -113,7 +92,7 @@ ns-process-data images \
 ### Output Directory Structure
 After processing, you'll get:
 ```
-processed/
+processed_data/
 ├── images/                 # Processed images (scaled, undistorted)
 ├── masks/                  # Automatic background masks (if available)
 ├── transforms.json         # Camera parameters in NeRF format
@@ -127,16 +106,16 @@ processed/
 
 #### Check Camera Alignment
 ```bash
-ns-viewer --load-config ~/my_dataset/processed/transforms.json
+ns-viewer --load-config ~/processed_data/transforms.json
 ```
 
 #### Inspect Point Cloud
 ```bash
-meshlab ~/my_dataset/processed/colmap/sparse/0/points3D.ply
+meshlab ~/processed_data/colmap/sparse_pc.ply
 ```
 ## (6) Dataset Preparation
 Place processed dataset at:  
-`/home/shibinzhang/3D_GS/processed_data/train_processed_data`(in our repository)
+`/processed_data/train_processed_data`(in our repository)
 
 ## (7) Training Instructions
 
@@ -144,7 +123,7 @@ Place processed dataset at:
 #### 1. Basic Training Command
 ```bash
 ns-train nerfacto \
-    --data /home/shibinzhang/3D_GS/processed_data/train_processed_data \
+    --data /processed_data/train_processed_data \
     --experiment-name train_processed_data \
     --output-dir New_results/nerfacto \
     --max-num-iterations 30000
@@ -192,7 +171,7 @@ ns-train nerfacto --load-dir /path/to/checkpoints
 #### 1. Basic Training Command
 ```bash
 ns-train tensorf \
-    --data /home/shibinzhang/3D_GS/processed_data/train_processed_data nerfstudio-data\
+    --data /processed_data/train_processed_data nerfstudio-data\
     --output-dir New_results/tensorf \
     --max-num-iterations 30000
 ```
@@ -220,7 +199,7 @@ ns-train tensorf --load-dir /path/to/checkpoints
 #### 1. Basic Training Command
 ```bash
 ns-train vanilla-nerf \
-    --data /home/shibinzhang/3D_GS/processed_data/train_processed_data nerfstudio-data\
+    --data /processed_data/train_processed_data nerfstudio-data\
     --output-dir New_results/vanilla-nerf \
     --max-num-iterations 30000
 ```
