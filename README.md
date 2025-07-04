@@ -1,4 +1,3 @@
-# Final-Homework-Neural-Network-and-Deep-Learning
 # README
 
 ## **1.** ​Neural Radiance Fields for Object Reconstruction and Novel View Synthesis​
